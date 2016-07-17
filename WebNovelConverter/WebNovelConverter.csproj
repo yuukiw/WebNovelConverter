@@ -68,6 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ElementExtensions.cs" />
+    <Compile Include="FaveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FaveForm.Designer.cs">
+      <DependentUpon>FaveForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Sources\BlogspotSource.cs" />
     <Compile Include="Sources\LNMTLSource.cs" />
     <Compile Include="Sources\Models\ChapterLink.cs" />
@@ -95,6 +101,9 @@
     <Compile Include="Sources\WordPressSource.cs" />
     <Compile Include="UrlHelper.cs" />
     <Compile Include="Sources\Models\WebNovelChapter.cs" />
+    <EmbeddedResource Include="FaveForm.resx">
+      <DependentUpon>FaveForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

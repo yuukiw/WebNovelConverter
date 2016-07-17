@@ -51,6 +51,7 @@
             this.settingsMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.exitMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.label4 = new System.Windows.Forms.Label();
             this.titleTextBox = new System.Windows.Forms.TextBox();
             this.coverTextBox = new System.Windows.Forms.TextBox();
@@ -65,6 +66,7 @@
             this.reverseButton = new System.Windows.Forms.Button();
             this.amountLabel = new System.Windows.Forms.Label();
             this.amountNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.fave = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.amountNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -181,6 +183,7 @@
             this.modeSelectedTextBox.Name = "modeSelectedTextBox";
             this.modeSelectedTextBox.Size = new System.Drawing.Size(310, 20);
             this.modeSelectedTextBox.TabIndex = 0;
+            this.modeSelectedTextBox.TextChanged += new System.EventHandler(this.modeSelectedTextBox_TextChanged);
             // 
             // retrieveButton
             // 
@@ -224,6 +227,7 @@
             this.chaptersListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.chaptersListBox.Size = new System.Drawing.Size(262, 264);
             this.chaptersListBox.TabIndex = 15;
+            this.chaptersListBox.SelectedIndexChanged += new System.EventHandler(this.chaptersListBox_SelectedIndexChanged);
             // 
             // convertBackgroundWorker
             // 
@@ -236,7 +240,8 @@
             // mainMenu1
             // 
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.fileMenuItem});
+            this.fileMenuItem,
+            this.menuItem1});
             // 
             // fileMenuItem
             // 
@@ -263,6 +268,12 @@
             this.exitMenuItem.Index = 2;
             this.exitMenuItem.Text = "Exit";
             this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 1;
+            this.menuItem1.Text = "Favorites";
+            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
             // 
             // label4
             // 
@@ -415,12 +426,24 @@
             this.amountNumericUpDown.TabIndex = 29;
             this.amountNumericUpDown.Visible = false;
             // 
+            // fave
+            // 
+            this.fave.Location = new System.Drawing.Point(540, 48);
+            this.fave.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.fave.Name = "fave";
+            this.fave.Size = new System.Drawing.Size(74, 23);
+            this.fave.TabIndex = 30;
+            this.fave.Text = "+ Favorite";
+            this.fave.UseVisualStyleBackColor = true;
+            this.fave.Click += new System.EventHandler(this.fave_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(625, 642);
+            this.Controls.Add(this.fave);
             this.Controls.Add(this.amountNumericUpDown);
             this.Controls.Add(this.amountLabel);
             this.Controls.Add(this.modeComboBox);
@@ -473,8 +496,6 @@
         private System.Windows.Forms.Button leftButton;
         private System.Windows.Forms.Button rightButton;
         private System.Windows.Forms.Label modeSelectedLabel;
-        private System.Windows.Forms.TextBox modeSelectedTextBox;
-        private System.Windows.Forms.Button retrieveButton;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.ListBox unknownListBox;
         private System.Windows.Forms.ListBox chaptersListBox;
@@ -499,6 +520,10 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label amountLabel;
         private System.Windows.Forms.NumericUpDown amountNumericUpDown;
+        private System.Windows.Forms.Button fave;
+        private System.Windows.Forms.MenuItem menuItem1;
+        public System.Windows.Forms.TextBox modeSelectedTextBox;
+        public System.Windows.Forms.Button retrieveButton;
     }
 }
 

@@ -17,17 +17,37 @@ using Epub.Net.Models;
 using WebNovelConverter.Properties;
 using WebNovelConverter.Sources;
 using WebNovelConverter.Sources.Models;
+using System.Runtime.InteropServices;
+
 
 namespace WebNovelConverter
 {
     public partial class MainForm : Form
     {
+
+   
+[DllImport("kernel32")]
+        private static extern long WritePrivateProfileString(string section,
+    string key, string val, string filePath);
+
+[DllImport("kernel32")]
+        private static extern int GetPrivateProfileString(string section,
+                 string key, string def, StringBuilder retVal,
+            int size, string filePath);
+
+   
+        string name = "abc";
+        string mdir = Application.StartupPath + "\\";
+
+        static public string Faveurl = "abc";
+
         private readonly NovelSourceCollection _sources = new NovelSourceCollection();
 
         public MainForm()
         {
             InitializeComponent();
-        }
+        
+       }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -43,10 +63,20 @@ namespace WebNovelConverter
 
             websiteTypeComboBox.SelectedIndex = 0;
             modeComboBox.SelectedIndex = 0;
-        }
+            fave.Enabled = false;
+
+            if(!File.Exists(mdir + "Faves.ini"))
+            {
+                File.Create(mdir + "Faves.ini");
+
+            }
+
+
+}
 
         private void retrieveButton_Click(object sender, EventArgs e)
         {
+            fave.Text = "+ Favorite";
             Uri uri;
             if (string.IsNullOrEmpty(modeSelectedTextBox.Text) || !Uri.TryCreate(modeSelectedTextBox.Text, UriKind.Absolute, out uri))
             {
@@ -257,6 +287,8 @@ namespace WebNovelConverter
 
                 Invoke((MethodInvoker)delegate
                 {
+
+
                     foreach (ChapterLink link in links)
                     {
                         if (link.Unknown)
@@ -285,10 +317,23 @@ namespace WebNovelConverter
                         if (!string.IsNullOrEmpty(novelInfo.Title))
                             titleTextBox.Text = novelInfo.Title;
                     }
+                    string compare = IniReadValue("Favorites", novelInfo.Title, mdir + "Faves.ini");
+
+                    if(compare == "")
+                    {
+                         name = novelInfo.Title;
+                    }
+                    else
+                    {
+                        name = novelInfo.Title;
+                        IniWriteValue("Favorites", name, modeSelectedTextBox.Text, mdir + "Faves.ini");
+                        fave.Text = "- Favorite";
+                    }
 
                     progressBar.Visible = false;
                     retrieveButton.Enabled = true;
-                });
+                    fave.Enabled = true;
+            });
             }
             else if (mode == "next chapter link")
             {
@@ -336,6 +381,7 @@ namespace WebNovelConverter
 
                     progressBar.Visible = false;
                     retrieveButton.Enabled = true;
+
                 });
             }
         }
@@ -462,6 +508,71 @@ namespace WebNovelConverter
 
             modeSelectedLabel.Location = new Point(modeSelectedTextBox.Location.X - textSize.Width - 10,
                 modeSelectedTextBox.Location.Y);
+        }
+
+        public void IniWriteValue(string Section, string Key, string Value, string Path)
+        {
+            WritePrivateProfileString(Section, Key, Value, Path);
+        }
+
+
+        /// <summary>
+        /// Read Data Value From the Ini File
+        /// </summary>
+        /// <PARAM name="Section"></PARAM>
+        /// <PARAM name="Key"></PARAM>
+        /// <PARAM name="Path"></PARAM>
+        /// <returns></returns>
+        public string IniReadValue(string Section, string Key, string Path)
+        {
+            StringBuilder temp = new StringBuilder(255);
+            int i = GetPrivateProfileString(Section, Key, "", temp,
+                                            255, Path);
+            return temp.ToString();
+
+        }
+
+
+
+
+        private void modeSelectedTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fave_Click(object sender, EventArgs e)
+        {
+             if (fave.Text.Equals("+ Favorite"))
+            {
+                    IniWriteValue("Favorites",name, modeSelectedTextBox.Text, mdir + "Faves.ini");
+                fave.Text = "- Favorite";
+            }
+            else
+            {
+                IniWriteValue("Favorites", name, null , mdir + "Faves.ini");
+                fave.Text = "+ Favorite";
+            }   
+            }
+
+
+        private void menuItem1_Click(object sender, EventArgs e)
+        {
+            using (FaveForm ff = new FaveForm())
+                ff.ShowDialog();
+            if(Faveurl == "abc")
+            { }
+            else
+            {
+                modeSelectedTextBox.Text = Faveurl;
+                retrieveButton.PerformClick();
+                fave.Text = "- Favorite";
+            }
+
+        }
+
+        private void chaptersListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
